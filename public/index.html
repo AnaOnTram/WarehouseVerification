@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Verification System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts temporarily disabled for debugging -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Warehouse Verification">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="container">
+                <div class="login-header">
+                    <div class="logo">
+                        <div class="logo-icon">📦</div>
+                        <h1>Warehouse Verification</h1>
+                    </div>
+                </div>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="username" data-translate="username">Username</label>
+                        <input type="text" id="username" data-translate="username" placeholder="Enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" data-translate="password">Password</label>
+                        <input type="password" id="password" data-translate="password" placeholder="Enter password" required>
+                    </div>
+                    <button class="btn btn-primary" id="login-btn" data-translate="loginButton">Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard-screen" class="screen">
+            <div class="header">
+                <h2 data-translate="dashboard">Dashboard</h2>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="logout-btn" data-translate="logout">Logout</button>
+                </div>
+            </div>
+            <div class="container">
+                <div class="card-grid">
+                    <div class="card" data-screen="mbv-upload-screen">
+                        <div class="card-icon">📄</div>
+                        <h3 data-translate="uploadMBV">Upload MBV</h3>
+                        <p>Upload and process MBV documents</p>
+                    </div>
+                    <div class="card" data-screen="my-items-screen">
+                        <div class="card-icon">📋</div>
+                        <h3 data-translate="myItems">My Items</h3>
+                        <p>View and manage your items</p>
+                    </div>
+                    <div class="card" data-screen="transfers-screen">
+                        <div class="card-icon">🚚</div>
+                        <h3 data-translate="transfers">Transfers</h3>
+                        <p>Process item transfers</p>
+                    </div>
+                    <div class="card admin-only" data-screen="admin-screen">
+                        <div class="card-icon">⚙️</div>
+                        <h3 data-translate="adminPanel">Admin</h3>
+                        <p>User and system management</p>
+                    </div>
+                </div>
+                
+                <!-- Language Switcher -->
+                <div class="language-switcher">
+                    <button class="btn btn-outline" id="language-toggle">
+                        <span id="language-icon">🌐</span>
+                        <span id="current-language-text" data-translate="language">Language</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MBV Upload Screen -->
+        <div id="mbv-upload-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="dashboard-screen">← Back</button>
+                <h2>Upload MBV</h2>
+            </div>
+            <div class="container">
+                <div class="upload-area">
+                    <input type="file" id="mbv-file" accept="image/*,.heic,.heif">
+                    <div class="upload-placeholder">
+                        <div class="upload-icon">📸</div>
+                        <p>Take a photo or select MBV image</p>
+                    </div>
+                </div>
+                <div id="mbv-preview" class="preview-section hidden">
+                    <img id="mbv-preview-image" alt="MBV Preview">
+                    <div class="processing-status">
+                        <div class="spinner hidden" id="processing-spinner"></div>
+                        <p id="processing-text">Processing...</p>
+                    </div>
+                </div>
+                <div id="extracted-info" class="form-section hidden">
+                    <h3>Extracted Information</h3>
+                    <div class="form-group">
+                        <label for="storage-location">Storage Location</label>
+                        <input type="text" id="storage-location" placeholder="e.g., HKG01 01 01 01 A1">
+                    </div>
+                    <div class="form-group">
+                        <label for="part-number">Part Number</label>
+                        <input type="text" id="part-number" placeholder="Enter part number">
+                    </div>
+                    <div class="form-group">
+                        <label for="serial-number">Serial Number</label>
+                        <input type="text" id="serial-number" placeholder="Enter serial number">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-type">Item Type</label>
+                        <select id="item-type">
+                            <option value="EVA">EVA</option>
+                            <option value="EVERGREEN">EVERGREEN</option>
+                            <option value="OTHER">OTHER</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="create-item-btn">Create Item</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Items Screen -->
+        <div id="my-items-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="dashboard-screen">← Back</button>
+                <h2>My Items</h2>
+            </div>
+            <div class="container">
+                <div id="items-list" class="items-list">
+                    <!-- Items will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Detail Screen -->
+        <div id="item-detail-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="my-items-screen">← Back</button>
+                <h2>Item Details</h2>
+            </div>
+            <div class="container">
+                <div id="item-details">
+                    <!-- Item details will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfers Screen -->
+        <div id="transfers-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="dashboard-screen">← Back</button>
+                <h2>Transfers</h2>
+            </div>
+            <div class="container">
+                <div id="forwarders-list" class="forwarders-list">
+                    <!-- Forwarders will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Items Screen -->
+        <div id="transfer-items-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="transfers-screen">← Back</button>
+                <h2 id="transfer-forwarder-title">Items for Transfer</h2>
+            </div>
+            <div class="container">
+                <div id="transfer-items-list" class="items-list">
+                    <!-- Transfer items will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Verification Screen -->
+        <div id="tag-verification-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" id="back-to-transfer-items">← Back</button>
+                <h2>Tag Verification</h2>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" data-screen="dashboard-screen">🏠 Dashboard</button>
+                </div>
+            </div>
+            <div class="container">
+                <div id="picker-info" class="form-section">
+                    <h3>Picker Information</h3>
+                    <div class="form-group">
+                        <label for="picker-name">Picker Name</label>
+                        <input type="text" id="picker-name" placeholder="Enter picker name">
+                    </div>
+                    <div class="form-group">
+                        <label for="picker-id">Picker ID</label>
+                        <input type="text" id="picker-id" placeholder="Enter picker ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="car-plate">Car Plate Number (Optional)</label>
+                        <input type="text" id="car-plate" placeholder="Enter car plate number">
+                    </div>
+                </div>
+                <div class="upload-area">
+                    <input type="file" id="tag-file" accept="image/*,.heic,.heif">
+                    <div class="upload-placeholder">
+                        <div class="upload-icon">📸</div>
+                        <p>Take a photo of the item tag</p>
+                    </div>
+                </div>
+                <div id="tag-preview" class="preview-section hidden">
+                    <img id="tag-preview-image" alt="Tag Preview">
+                    <button class="btn btn-primary" id="process-tag-btn">Process Tag</button>
+                </div>
+                
+                <div id="verification-comparison" class="form-section hidden">
+                    <h3>Tag Verification Results</h3>
+                    <div id="comparison-results"></div>
+                    <div id="verification-actions" class="verification-actions">
+                        <button class="btn btn-danger" id="reject-verification-btn">Reject & Retake Photo</button>
+                        <button class="btn btn-primary" id="confirm-verification-btn">Confirm Transfer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Screen -->
+        <div id="admin-screen" class="screen">
+            <div class="header">
+                <button class="btn btn-back" data-screen="dashboard-screen">← Back</button>
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="container">
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="users">Users</button>
+                    <button class="tab-btn" data-tab="items">Items</button>
+                    <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+                </div>
+                <div id="admin-content">
+                    <!-- Admin content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
